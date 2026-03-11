@@ -1,0 +1,209 @@
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+  - name: subname
+    type: string
+  - name: age
+    type: int
+    constraints:
+      min: 5
+      max: 60
+  - name: gender
+    type: choice
+    choices: [Male, Female]
+
+subinfo_mapping:
+  subject_id: 被试号
+  subname: 被试姓名(拼音)
+  age: 年龄
+  gender: 性别
+  Male: 男
+  Female: 女
+  registration_failed: 注册失败。
+  registration_successful: 注册成功！
+  invalid_input: 字段 {field} 输入无效
+
+window:
+  size: [1920, 1080]
+  units: deg
+  screen: 0
+  bg_color: gray
+  fullscreen: true
+  fullscreen_lock_escape: true
+  monitor_width_cm: 60
+  monitor_distance_cm: 72
+
+task:
+  task_name: eeg_BART_preview
+  language: Chinese
+  voice_name: zh-CN-YunyangNeural
+  voice_enabled: true
+  total_blocks: 1
+  total_trials: 9
+  trial_per_block: 9
+  conditions: [blue, yellow, orange]
+  key_list: [space, right]
+  pump_key: space
+  cash_key: right
+  delta: 0.0
+  seed_mode: same_across_sub
+  overall_seed: 2025
+  explosion_sampling_mode: without_replacement_cycle
+  decision_timeout_enabled: false
+  decision_timeout_fallback_s: 600.0
+  blue_max_pumps: 24
+  blue_delta: 5
+  orange_max_pumps: 6
+  orange_delta: 20
+  yellow_max_pumps: 12
+  yellow_delta: 10
+  max_balloon_scale: 1
+  initial_balloon_scale: 0.2
+  balloon_size_deg: [4, 5]
+  input_mode: keyboard
+  hide_cursor: true
+
+stimuli:
+  fixation:
+    type: text
+    text: "+"
+    color: white
+
+  blue_balloon:
+    type: image
+    image: ./assets/blue_balloon.png
+
+  yellow_balloon:
+    type: image
+    image: ./assets/yellow_balloon.png
+
+  orange_balloon:
+    type: image
+    image: ./assets/orange_balloon.png
+
+  blue_pop:
+    type: image
+    image: ./assets/blue_pop.png
+
+  yellow_pop:
+    type: image
+    image: ./assets/yellow_pop.png
+
+  orange_pop:
+    type: image
+    image: ./assets/orange_pop.png
+
+  score_bank_text:
+    type: text
+    text: "+{score_bank}"
+    color: white
+    pos: [0, -4]
+
+  cash_screen:
+    type: text
+    text: "拿走分数"
+    color: green
+
+  timeout_screen:
+    type: text
+    text: "请及时按键"
+    color: red
+
+  pop_sound:
+    type: sound
+    file: ./assets/pop.ogg
+
+  cash_sound:
+    type: sound
+    file: ./assets/cash_fixed.ogg
+
+  block_break:
+    type: text
+    text: |
+      第 {block_num} / {total_blocks} 部分完成
+      总分：{total_score}
+
+      请在充分休息后按下空格键
+      进入下一个部分
+    color: white
+
+  instruction_text:
+    type: textbox
+    text: |
+      【BART任务】
+
+      欢迎参与本次任务！
+
+      您的目标是尽可能多地为气球充气来获得分数。
+      每按一次【空格键】，气球就会变大一点，您累积的分数也会增加。
+
+      但是，气球随时都可能爆炸！
+      如果气球爆炸，您在当前气球上累积的所有分数都将清零。
+
+      您可以随时按【向右箭头】拿走分数，
+      将当前气球累积的分数存入您的总分中，然后进入下一个气球。
+
+      不同颜色的气球，爆炸的风险可能不同。
+      请您在追求高分和避免风险之间做出权衡。
+
+      按【空格键】开始游戏，祝您好运！
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+
+  win_feedback:
+    type: text
+    text: "获得：{fb_score}分"
+    color: green
+
+  lose_feedback:
+    type: text
+    text: "获得：{fb_score}分"
+    color: red
+
+  good_bye:
+    type: text
+    text: |
+      任务结束
+      最后得分：{total_score}
+      感谢您的参与
+      请按【空格键】键退出
+    color: white
+
+timing:
+  fixation_duration: 0.8
+  response_feedback_duration: 1.0
+  balloon_duration: 2.0
+  feedback_duration: 1.0
+
+triggers:
+  map:
+    blue_pop: 31
+    blue_cash: 32
+    blue_timeout: 33
+    blue_pump_press: 34
+    blue_cash_press: 35
+    blue_balloon_onset: 36
+    orange_pop: 21
+    orange_cash: 22
+    orange_timeout: 23
+    orange_pump_press: 24
+    orange_cash_press: 25
+    orange_balloon_onset: 26
+    yellow_pop: 11
+    yellow_cash: 12
+    yellow_timeout: 13
+    yellow_pump_press: 14
+    yellow_cash_press: 15
+    yellow_balloon_onset: 16
+    exp_onset: 98
+    exp_end: 99
+    block_onset: 100
+    block_end: 101
+    fixation_onset: 1
+    feedback_onset: 50
