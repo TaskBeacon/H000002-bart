@@ -21,7 +21,50 @@ import configText from "./config/config.yaml?raw";
 import { run_trial } from "./src/run_trial";
 import { summarizeBlock } from "./src/utils";
 
+const blueBalloonAsset = new URL("./assets/blue_balloon.png", import.meta.url).href;
+const yellowBalloonAsset = new URL("./assets/yellow_balloon.png", import.meta.url).href;
+const orangeBalloonAsset = new URL("./assets/orange_balloon.png", import.meta.url).href;
+const bluePopAsset = new URL("./assets/blue_pop.png", import.meta.url).href;
+const yellowPopAsset = new URL("./assets/yellow_pop.png", import.meta.url).href;
+const orangePopAsset = new URL("./assets/orange_pop.png", import.meta.url).href;
+const popSoundAsset = new URL("./assets/pop.ogg", import.meta.url).href;
+const cashSoundAsset = new URL("./assets/cash_fixed.ogg", import.meta.url).href;
 const instructionVoiceAsset = new URL("./assets/instruction_text_voice.mp3", import.meta.url).href;
+
+function patchBARTAssets(stimConfig: Record<string, StimSpec>): void {
+  const imageOverrides: Record<string, string> = {
+    blue_balloon: blueBalloonAsset,
+    yellow_balloon: yellowBalloonAsset,
+    orange_balloon: orangeBalloonAsset,
+    blue_pop: bluePopAsset,
+    yellow_pop: yellowPopAsset,
+    orange_pop: orangePopAsset
+  };
+  const soundOverrides: Record<string, string> = {
+    pop_sound: popSoundAsset,
+    cash_sound: cashSoundAsset
+  };
+
+  for (const [label, assetUrl] of Object.entries(imageOverrides)) {
+    const spec = stimConfig[label];
+    if (spec?.type === "image") {
+      stimConfig[label] = {
+        ...spec,
+        image: assetUrl
+      };
+    }
+  }
+
+  for (const [label, assetUrl] of Object.entries(soundOverrides)) {
+    const spec = stimConfig[label];
+    if (spec?.type === "sound") {
+      stimConfig[label] = {
+        ...spec,
+        file: assetUrl
+      };
+    }
+  }
+}
 
 function buildWaitTrial(
   meta: { trial_id: string; condition: string; trial_index: number },
@@ -41,6 +84,7 @@ function buildWaitTrial(
 
 export async function run(root: HTMLElement): Promise<void> {
   const parsed = parsePsyflowConfig(configText, import.meta.url);
+  patchBARTAssets(parsed.stim_config);
   const settings = TaskSettings.from_dict(parsed.task_config);
   const subInfo = new SubInfo(parsed.subform_config);
   const stimBank = new StimBank(parsed.stim_config);
