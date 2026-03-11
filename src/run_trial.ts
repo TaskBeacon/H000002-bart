@@ -130,7 +130,7 @@ export function run_trial(
     const pop = trial
       .unit("pop")
       .when((snapshot) => snapshot.units[pumpLabel]?.response === pumpKey && pumpIndex + 1 >= explosionPoint)
-      .addStim(stimBank.get(`${condition}_pop`))
+      .addStim(stimBank.rebuild(`${condition}_pop`, { size: currentSize }))
       .addStim(stimBank.get("pop_sound"));
     set_trial_context(pop, {
       trial_id: trial.trial_id,
