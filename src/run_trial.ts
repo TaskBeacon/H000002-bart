@@ -54,6 +54,7 @@ export function run_trial(
   const initialScale = Number(settings.initial_balloon_scale ?? 0.2);
   const maxScale = Number(settings.max_balloon_scale ?? 1);
   const balloonSize = (settings.balloon_size_deg as [number, number] | undefined) ?? [4, 5];
+  const popSize = (settings.pop_size_deg as [number, number] | undefined) ?? balloonSize;
   const sizeStep = (maxScale - initialScale) / Math.max(1, maxPumps);
   const decisionTimeoutEnabled = Boolean(settings.decision_timeout_enabled ?? false);
   const decisionWindow = decisionTimeoutEnabled
@@ -130,7 +131,7 @@ export function run_trial(
     const pop = trial
       .unit("pop")
       .when((snapshot) => snapshot.units[pumpLabel]?.response === pumpKey && pumpIndex + 1 >= explosionPoint)
-      .addStim(stimBank.rebuild(`${condition}_pop`, { size: currentSize }))
+      .addStim(stimBank.rebuild(`${condition}_pop`, { size: popSize }))
       .addStim(stimBank.get("pop_sound"));
     set_trial_context(pop, {
       trial_id: trial.trial_id,
