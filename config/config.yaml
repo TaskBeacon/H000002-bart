@@ -42,9 +42,9 @@ task:
   language: Chinese
   voice_name: zh-CN-YunyangNeural
   voice_enabled: true
-  total_blocks: 1
-  total_trials: 9
-  trial_per_block: 9
+  total_blocks: 3
+  total_trials: 30
+  trial_per_block: 10
   conditions: [blue, yellow, orange]
   key_list: [space, right]
   pump_key: space
